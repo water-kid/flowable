@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef" exporter="Flowable Open Source Modeler" exporterVersion="6.7.2">
+  <process id="DynamicFormDemo" name="DynamicFormDemo" isExecutable="true">
+    <documentation>DynamicFormDemo</documentation>
+    <startEvent id="startEvent1" flowable:initiator="initiator" flowable:formFieldValidation="true">
+      <extensionElements>
+        <flowable:formProperty id="days" name="请假天数" type="long" required="true"></flowable:formProperty>
+        <flowable:formProperty id="reason" name="请假理由" type="string" required="true"></flowable:formProperty>
+        <flowable:formProperty id="startTime" name="开始时间" type="date" datePattern="yy-MM-dd" required="true"></flowable:formProperty>
+        <flowable:formProperty id="endTime" name="结束时间" type="date" datePattern="yy-MM-dd" required="true"></flowable:formProperty>
+        <flowable:formProperty id="type" name="请假类型" type="enum" required="true">
+          <flowable:value id="askforleave" name="请假"></flowable:value>
+          <flowable:value id="daysoff" name="调休"></flowable:value>
+        </flowable:formProperty>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </startEvent>
+    <userTask id="sid-F53492EF-86E6-4F43-B730-087DA7C13C63" name="提交请假申请" flowable:assignee="${initiator}" flowable:formFieldValidation="true">
+      <extensionElements>
+        <flowable:formProperty id="days" name="请假天数" type="long" required="true"></flowable:formProperty>
+        <flowable:formProperty id="reason" name="请假理由" type="string" required="true"></flowable:formProperty>
+        <flowable:formProperty id="startTime" name="开始时间" type="date" datePattern="yy-MM-dd" required="true"></flowable:formProperty>
+        <flowable:formProperty id="endTime" name="结束时间" type="date" datePattern="yy-MM-dd" required="true"></flowable:formProperty>
+        <flowable:formProperty id="type" name="请假类型" type="enum" required="true">
+          <flowable:value id="askforleave" name="请假"></flowable:value>
+          <flowable:value id="daysoff" name="调休"></flowable:value>
+        </flowable:formProperty>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-9600EE7B-9C48-4A1C-8050-0387873EB9CD" sourceRef="startEvent1" targetRef="sid-F53492EF-86E6-4F43-B730-087DA7C13C63"></sequenceFlow>
+    <userTask id="sid-FBFFF790-84C8-4890-8268-44DBA9968B08" name="请假审批" flowable:formFieldValidation="true"></userTask>
+    <sequenceFlow id="sid-5FAB9C56-E9B9-4FEE-AE01-8E5B6DC8CA7C" sourceRef="sid-F53492EF-86E6-4F43-B730-087DA7C13C63" targetRef="sid-FBFFF790-84C8-4890-8268-44DBA9968B08"></sequenceFlow>
+    <endEvent id="sid-9BA87160-05CC-4566-B27A-375E47A5E146"></endEvent>
+    <sequenceFlow id="sid-C4A6B344-7A55-4732-94A5-A05C37495E71" sourceRef="sid-FBFFF790-84C8-4890-8268-44DBA9968B08" targetRef="sid-9BA87160-05CC-4566-B27A-375E47A5E146"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_DynamicFormDemo">
+    <bpmndi:BPMNPlane bpmnElement="DynamicFormDemo" id="BPMNPlane_DynamicFormDemo">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="75.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-F53492EF-86E6-4F43-B730-087DA7C13C63" id="BPMNShape_sid-F53492EF-86E6-4F43-B730-087DA7C13C63">
+        <omgdc:Bounds height="80.0" width="100.0" x="175.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-FBFFF790-84C8-4890-8268-44DBA9968B08" id="BPMNShape_sid-FBFFF790-84C8-4890-8268-44DBA9968B08">
+        <omgdc:Bounds height="80.0" width="100.0" x="315.0" y="135.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-9BA87160-05CC-4566-B27A-375E47A5E146" id="BPMNShape_sid-9BA87160-05CC-4566-B27A-375E47A5E146">
+        <omgdc:Bounds height="28.0" width="28.0" x="465.0" y="164.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-5FAB9C56-E9B9-4FEE-AE01-8E5B6DC8CA7C" id="BPMNEdge_sid-5FAB9C56-E9B9-4FEE-AE01-8E5B6DC8CA7C" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="274.95000000000005" y="176.92857142857142"></omgdi:waypoint>
+        <omgdi:waypoint x="314.99999999999847" y="176.07035714285715"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-C4A6B344-7A55-4732-94A5-A05C37495E71" id="BPMNEdge_sid-C4A6B344-7A55-4732-94A5-A05C37495E71" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="414.95000000000005" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="440.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="440.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="465.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-9600EE7B-9C48-4A1C-8050-0387873EB9CD" id="BPMNEdge_sid-9600EE7B-9C48-4A1C-8050-0387873EB9CD" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="104.94999899727567" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="174.99999999997203" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

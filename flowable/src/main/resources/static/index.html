@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>员工请假</title>
+<!--    vue3-->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Import style -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <!-- Import Vue 3 -->
+    <script src="//unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+
+<!--    axios-->
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div>
+        <h1>提交请假申请</h1>
+        <table>
+            <tr>
+                <td>请输入请假天数：</td>
+                <td>
+                    <el-input v-model="afl.days"  placeholder="请假天数"></el-input>
+                </td>
+            </tr>
+            <tr>
+                <td>请假理由：</td>
+                <td>
+                    <el-input v-model="afl.reason"  placeholder="请假理由"></el-input>
+                </td>
+            </tr>
+            <tr>
+                <td>请假开始时间：</td>
+                <td>
+                    <div class="block">
+                        <!--
+                            format : 显示的时间格式
+                            value-format ： 上传到服务器的时间格式
+                        -->
+                        <el-date-picker
+                                v-model="afl.startTime"
+                                type="datetime"
+                                placeholder="开始时间"
+                                format="YYYY-MM-DD hh:mm"
+                                value-format="YYYY-MM-DD hh:mm"
+                        />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>请假结束时间：</td>
+                <td>
+                    <div class="block">
+                        <!--
+                            format : 显示的时间格式
+                            value-format ： 上传到服务器的时间格式
+                        -->
+                        <el-date-picker
+                                v-model="afl.endTime"
+                                type="datetime"
+                                placeholder="结束时间"
+                                format="YYYY-MM-DD hh:mm"
+                                value-format="YYYY-MM-DD hh:mm"
+                        />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>请选择审批人：</td>
+                <td>
+                    <el-select v-model="afl.approveUser" class="m-2" placeholder="选择审批人">
+                        <el-option
+                                v-for="item in users"
+                                :key="item.id"
+                                :label="item.username"
+                                :value="item.username"
+                        />
+                    </el-select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <el-button type="primary" @click="submit">submit</el-button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <div>
+            <el-tag type="danger">需要审批的请假列表： 处理人是当前用户</el-tag>
+            <div>
+                <el-table :data="tasks" stripe border style="width: 100%">
+                    <el-table-column prop="taskId" label="taskId" ></el-table-column>
+                    <el-table-column prop="days" label="请假天数" ></el-table-column>
+                    <el-table-column prop="reason" label="请假理由" ></el-table-column>
+                    <el-table-column prop="startTime" label="起始时间" ></el-table-column>
+                    <el-table-column prop="endTime" label="结束时间" ></el-table-column>
+                    <el-table-column prop="applicant" label="申请人" ></el-table-column>
+                    <el-table-column label="操作">
+                        <template #default="scope">
+<!--                            scope.row : 那一行的数据-->
+                            <el-button type="primary"  @click="handlerApprove(scope.row,true)">同意</el-button>
+                            <el-button type="danger"  @click="handlerApprove(scope.row,false)">拒绝</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+
+        <div>
+            <el-tag>待处理的请假列表: 发起人是当前用户</el-tag>
+            <div>
+                <el-table :data="unapproveProcess" stripe border style="width: 100%">
+                    <el-table-column prop="processId" label="流程实例id" ></el-table-column>
+                    <el-table-column prop="days" label="请假天数" ></el-table-column>
+                    <el-table-column prop="reason" label="请假理由" ></el-table-column>
+                    <el-table-column prop="startTime" label="起始时间" ></el-table-column>
+                    <el-table-column prop="endTime" label="结束时间" ></el-table-column>
+                    <el-table-column prop="approveUser" label="审批人" ></el-table-column>
+                    <el-table-column label="操作">
+                        <template #default="scope">
+                            <!--                            scope.row : 那一行的数据-->
+                            <el-button type="primary" text @click="showProcessImage(scope.row)">查看</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+
+
+        <div>
+<!--             type为info ： 灰色的-->
+            <el-tag type="info">历史请假列表: 发起人是当前用户</el-tag>
+            <div>
+                <el-table :data="history" stripe border style="width: 100%">
+                    <el-table-column prop="processId" label="流程实例id" ></el-table-column>
+                    <el-table-column prop="days" label="请假天数" ></el-table-column>
+                    <el-table-column prop="reason" label="请假理由" ></el-table-column>
+                    <el-table-column prop="startTime" label="起始时间" ></el-table-column>
+                    <el-table-column prop="endTime" label="结束时间" ></el-table-column>
+                    <el-table-column prop="approveUser" label="审批人" ></el-table-column>
+                    <el-table-column prop="approval" label="审批结果" >
+                        <template #default="scope">
+                           <el-tag v-if="scope.row.approval" type="success">通过</el-tag>
+                           <el-tag v-if="!scope.row.approval" type="danger">不通过</el-tag>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column label="操作">
+                        <template #default="scope">
+                            <!--                            scope.row : 那一行的数据
+                                        historyService ： 没有执行完和执行完的 都能查到
+                            -->
+                            <el-button type="primary" text @click="showProcessImage(scope.row)">查看</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+    </div>
+
+
+    <el-dialog
+            v-model="dialogVisible"
+            title="审批进度"
+            :before-close="handleClose"
+    >
+        <img :src="processImageUrl" alt="">
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">
+          确定
+        </el-button>
+      </span>
+        </template>
+    </el-dialog>
+</div>
+
+<script>
+    Vue.createApp({
+        data(){
+            return{
+                history:[],
+                tasks:[],
+                dialogVisible:false,
+                processImageUrl:"",
+                afl:{
+                    days:0,
+                    reason:null,
+                    startTime:null,
+                    endTime:null,
+                    approveUser:null,
+                    processId:null
+                },
+                users:[],
+                unapproveProcess:[]
+            }
+        },
+        methods:{
+            handlerApprove(row,approval){
+                row.approval = approval
+                let that = this;
+                axios.post("/approve",row).then((resp)=>{
+                    console.log(resp)
+                    if (resp.data.code == 200){
+                        // 成功
+                        that.$message.success(resp.data.msg)
+                        // 刷新列表
+                        that.initTasks()
+                    }
+
+                }).catch((error)=>{
+                    console.log(error)
+                    that.$message.error(resp.data.msg)
+                })
+            },
+            initHistory(){
+                let that = this;
+                axios.get("/history").then((resp)=>{
+                    console.log("resp",resp)
+                    that.history = resp.data;
+                })
+            },
+            initTasks(){
+                let that = this;
+                axios.get("/tasks").then((resp)=>{
+                    console.log("resp",resp)
+                    that.tasks = resp.data;
+                })
+            },
+            showProcessImage(row){
+                this.dialogVisible = true
+                this.processImageUrl = "/image/"+row.processId
+            },
+            loadUnapproveProcess(){
+                let that = this;
+                axios.get("/unapprove").then((resp)=>{
+                    that.unapproveProcess = resp.data;
+                })
+            },
+            initUser(){
+                let that = this;
+                axios.get("/users").then((resp)=>{
+                    console.log("resp",resp)
+                    that.users = resp.data;
+                })
+            },
+            submit(){
+                    let that = this;
+                axios.post("/askForLeave",this.afl).then((resp)=>{
+                    // 成功
+                   that.$message.success(resp.data.msg)
+
+                    // 清空输入框
+                    this.afl ={
+                       days:0,
+                        reason: null,
+                        startTime: null,
+                        endTime:null,
+                        approveUser: null
+                    }
+
+                    // 刷新表格
+                    that.loadUnapproveProcess()
+                }).catch((error)=>{
+                    console.log(error)
+                    that.$message.error(resp.data.msg)
+                })
+            }
+        },
+        mounted(){
+            this.initUser()
+            this.loadUnapproveProcess()
+            this.initTasks()
+            this.initHistory()
+        }
+
+    }).use(ElementPlus).mount("#app")
+</script>
+</body>
+</html>

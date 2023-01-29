@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef" exporter="Flowable Open Source Modeler" exporterVersion="6.7.2">
+  <process id="ReceiveTaskDemo" name="ReceiveTaskDemo" isExecutable="true">
+    <documentation>ReceiveTaskDemo</documentation>
+    <startEvent id="startEvent1" flowable:formFieldValidation="true"></startEvent>
+    <sequenceFlow id="sid-5735D782-7060-47C2-BCA5-A1A06F902BF8" sourceRef="startEvent1" targetRef="statistics_sales"></sequenceFlow>
+    <sequenceFlow id="sid-B4B8F1EE-B098-4FC6-865A-66B8D5223770" sourceRef="statistics_sales" targetRef="send_to_boss"></sequenceFlow>
+    <endEvent id="sid-E9F561A9-5E3F-4309-8548-7A83709D8936"></endEvent>
+    <sequenceFlow id="sid-E0DDA58E-DE80-487C-8603-C21C7D6E374A" sourceRef="send_to_boss" targetRef="sid-E9F561A9-5E3F-4309-8548-7A83709D8936"></sequenceFlow>
+    <receiveTask id="statistics_sales" name="统计今日销售额
+"></receiveTask>
+    <receiveTask id="send_to_boss" name="自动发送报告给老板"></receiveTask>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ReceiveTaskDemo">
+    <bpmndi:BPMNPlane bpmnElement="ReceiveTaskDemo" id="BPMNPlane_ReceiveTaskDemo">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-E9F561A9-5E3F-4309-8548-7A83709D8936" id="BPMNShape_sid-E9F561A9-5E3F-4309-8548-7A83709D8936">
+        <omgdc:Bounds height="28.0" width="28.0" x="465.0" y="164.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="statistics_sales" id="BPMNShape_statistics_sales">
+        <omgdc:Bounds height="80.0" width="100.0" x="175.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="send_to_boss" id="BPMNShape_send_to_boss">
+        <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-5735D782-7060-47C2-BCA5-A1A06F902BF8" id="BPMNEdge_sid-5735D782-7060-47C2-BCA5-A1A06F902BF8" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="129.9499984899576" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="174.9999999999917" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-B4B8F1EE-B098-4FC6-865A-66B8D5223770" id="BPMNEdge_sid-B4B8F1EE-B098-4FC6-865A-66B8D5223770" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="274.9499999999907" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="319.9999999999807" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-E0DDA58E-DE80-487C-8603-C21C7D6E374A" id="BPMNEdge_sid-E0DDA58E-DE80-487C-8603-C21C7D6E374A" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="419.95000000000005" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="465.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

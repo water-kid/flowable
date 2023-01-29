@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cj.mapper.UserMapper">
+
+    <select id="loadUserByUsername" resultType="com.cj.model.User">
+        select * from user where username=#{username}
+    </select>
+    <select id="getRolesByUserId" resultType="com.cj.model.Role">
+        select * from ask_for_leave.role r,ask_for_leave.user_role ur where r.id=ur.rid and ur.uid=#{id}
+    </select>
+
+    <select id="getAllUsersExcludeCurrent" resultType="com.cj.model.User">
+        select * from user where username != #{username}
+    </select>
+</mapper>
